@@ -1,26 +1,26 @@
 package backend.academy.hangman_game;
 
-public class RightWordDTO {
+public class GameWordDTO {
     private final String word;
     private final String hint;
     private final WordDifficultyLevel wordDifficultyLevel;
-    private final WordCategoty wordCategoty;
+    private final WordCategory wordCategory;
 
-    public RightWordDTO(String word, String hint, WordCategoty wordCategoty) {
+    public GameWordDTO(String word, String hint, WordCategory wordCategory) {
         this.word = word;
         this.hint = hint;
-        this.wordCategoty = wordCategoty;
+        this.wordCategory = wordCategory;
         if (word.length() < 5) {
-            wordDifficultyLevel = WordDifficultyLevel.Easy;
+            this.wordDifficultyLevel = WordDifficultyLevel.Easy;
         } else if (word.length() < 8) {
-            wordDifficultyLevel = WordDifficultyLevel.Medium;
+            this.wordDifficultyLevel = WordDifficultyLevel.Medium;
         } else {
-            wordDifficultyLevel = WordDifficultyLevel.Hard;
+            this.wordDifficultyLevel = WordDifficultyLevel.Hard;
         }
     }
 
-    public WordCategoty getWordCategoty() {
-        return wordCategoty;
+    public WordCategory getWordCategoty() {
+        return wordCategory;
     }
 
     public WordDifficultyLevel getWordDifficultyLevel() {

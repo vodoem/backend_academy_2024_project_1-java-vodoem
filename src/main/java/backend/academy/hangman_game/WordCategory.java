@@ -1,6 +1,6 @@
 package backend.academy.hangman_game;
 
-public enum WordCategoty {
+public enum WordCategory {
     ANIMALS,
     SPORT_TYPES,
     CAR_BRANDS;
