@@ -7,7 +7,7 @@ import java.util.Random;
 public class WordsStorage {
     private static List<GameWordDTO> gameWords;
 
-    public static void initializeGameWords(List<GameWordDTO> gameWords){
+    public static void initializeGameWords(List<GameWordDTO> gameWords) {
         WordsStorage.gameWords = gameWords;
     }
 

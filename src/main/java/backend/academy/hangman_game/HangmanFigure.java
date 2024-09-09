@@ -1,7 +1,5 @@
 package backend.academy.hangman_game;
 
-
-
 public class HangmanFigure {
     private final String[] stages = {
         """
@@ -366,6 +364,7 @@ public class HangmanFigure {
 
         return stages[stageIndex];
     }
+
     private int limitStageIndex(int stageIndex) {
         int totalStages = stages.length;
         if (stageIndex >= totalStages) {
