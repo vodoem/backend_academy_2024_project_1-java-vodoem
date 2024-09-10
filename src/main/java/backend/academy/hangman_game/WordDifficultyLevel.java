@@ -1,9 +1,9 @@
 package backend.academy.hangman_game;
 
 public enum WordDifficultyLevel {
-    Hard("Сложно"),
-    Medium("Средне"),
-    Easy("Легко");
+    HARD("Сложно"),
+    MEDIUM("Средне"),
+    EASY("Легко");
     private final String title;
 
     private WordDifficultyLevel(String title) {
