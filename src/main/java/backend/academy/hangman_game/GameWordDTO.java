@@ -11,11 +11,11 @@ public class GameWordDTO {
         this.hint = hint;
         this.wordCategory = wordCategory;
         if (word.length() < 5) {
-            this.wordDifficultyLevel = WordDifficultyLevel.Easy;
-        } else if (word.length() < 8) {
-            this.wordDifficultyLevel = WordDifficultyLevel.Medium;
+            this.wordDifficultyLevel = WordDifficultyLevel.EASY;
+        } else if (word.length() < 7) {
+            this.wordDifficultyLevel = WordDifficultyLevel.MEDIUM;
         } else {
-            this.wordDifficultyLevel = WordDifficultyLevel.Hard;
+            this.wordDifficultyLevel = WordDifficultyLevel.HARD;
         }
     }
 
