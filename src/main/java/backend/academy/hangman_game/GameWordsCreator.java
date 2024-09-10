@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GameWordsCreator {
 
-    public static List<GameWordDTO> words;
+    private static List<GameWordDTO> words;
 
     public static List<GameWordDTO> gameWordsCreating(
         List<String> words,
