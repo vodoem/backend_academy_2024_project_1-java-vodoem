@@ -1,97 +1,54 @@
 package backend.academy.hangman_game;
 
-import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Game {
-    private static List<GameWordDTO> gameWords;
-    private static WordDifficultyLevel difficultyLevel;
-    private static WordCategory category;
-    private static GameWordDTO randomWord;
-    private static int acceptableMissNumber;
-    private static int remainingAttempts;
-    private static final Set<Character> guessedLetters = new HashSet<>();
-    private static final Set<Character> incorrectGuesses = new HashSet<>();
+    private final WordsStorage wordsStorage;
+    private GameWordDTO currentWord;
+    private final Set<Character> guessedLetters;
+    private final Set<Character> incorrectGuesses; //не использую в логике, но возможно будет полезна при расширении функционала
+    private int remainingAttempts;
 
-    public static void initializeGameWords(
-        List<String> words, List<String> hints, List<WordCategory> wordCategories
-    ) {
-        Game.gameWords = GameWordsCreator.gameWordsCreating(words, hints, wordCategories);
-        WordsStorage.initializeGameWords(gameWords);
+    public Game(WordsStorage wordsStorage) {
+        this.wordsStorage = wordsStorage;
+        this.guessedLetters = new HashSet<>();
+        this.incorrectGuesses = new HashSet<>();
     }
 
-    public static void start() throws IOException {
-        // Запрашиваем у пользователя уровень сложности и категорию слов
-        difficultyLevelRequest();
-        categoryRequest();
-
-        // Устанавливаем случайное слово
-        setRandomWord(category, difficultyLevel);
-        setAcceptableMissNumber(difficultyLevel);
-
-        remainingAttempts = acceptableMissNumber;
-
-        System.out.println("Игра началась! Ваша подсказка: " + randomWord.getHint());
-
-        // Главный игровой цикл
-        play();
+    public void initializeGame(WordCategory category, WordDifficultyLevel difficultyLevel) {
+        currentWord = wordsStorage.getRandomWordWithChosenCategoryAndDifficultyLevel(category, difficultyLevel);
+        remainingAttempts = getMaxAttempts(difficultyLevel);
+        guessedLetters.clear();
+        incorrectGuesses.clear();
     }
 
-    private static void play() throws IOException {
-        HangmanFigure hangmanFigure = new HangmanFigure(acceptableMissNumber);
-        InputHandler inputHandler = new InputHandler();
+    public int getMaxAttempts() {
+        return getMaxAttempts(currentWord.getDifficulty());
+    }
 
-        while (remainingAttempts > 0 && !isWordGuessed()) {
-            displayGameState(hangmanFigure);
-            handleUserGuess(inputHandler);
-        }
-
-        concludeGame(hangmanFigure);
-        inputHandler.close();
+    private int getMaxAttempts(WordDifficultyLevel difficultyLevel) {
+        return switch (difficultyLevel) {
+            case EASY -> 13;
+            case MEDIUM -> 10;
+            case HARD -> 7;
+            default -> 0;
+        };
     }
 
 
-    private static void displayGameState(HangmanFigure hangmanFigure) {
-        System.out.println("\nТекущий прогресс: " + getWordProgress());
-        System.out.println("Осталось попыток: " + remainingAttempts);
-        System.out.println(hangmanFigure.getFigure(remainingAttempts));
-    }
-
-
-    private static void handleUserGuess(InputHandler inputHandler) throws IOException {
-        char guess = inputHandler.getGuess();
-
-        if (guessedLetters.contains(guess) || incorrectGuesses.contains(guess)) {
-            System.out.println("Эта буква уже была использована.");
-            return;
-        }
-
-        if (randomWord.getWord().indexOf(guess) >= 0) {
-            guessedLetters.add(guess);
-            System.out.println("Правильно!");
+    public void handleGuess(char letter) {
+        if (currentWord.getWord().indexOf(letter) >= 0) {
+            guessedLetters.add(letter);
         } else {
-            incorrectGuesses.add(guess);
+            incorrectGuesses.add(letter);
             remainingAttempts--;
-            System.out.println("Неправильно!");
         }
     }
 
-
-    private static void concludeGame(HangmanFigure hangmanFigure) {
-        if (isWordGuessed()) {
-            System.out.println("Поздравляем! Вы угадали слово: " + randomWord.getWord());
-        } else {
-            System.out.println("Вы проиграли. Загаданное слово было: " + randomWord.getWord());
-            System.out.println(hangmanFigure.getFigure(remainingAttempts));
-        }
-    }
-
-
-    private static String getWordProgress() {
+    public String getWordProgress() {
         StringBuilder progress = new StringBuilder();
-        for (char letter : randomWord.getWord().toCharArray()) {
+        for (char letter : currentWord.getWord().toCharArray()) {
             if (guessedLetters.contains(letter)) {
                 progress.append(letter);
             } else {
@@ -102,9 +59,16 @@ public class Game {
         return progress.toString().trim();
     }
 
+    public int getRemainingAttempts() {
+        return remainingAttempts;
+    }
 
-    private static boolean isWordGuessed() {
-        for (char letter : randomWord.getWord().toCharArray()) {
+    public boolean isGameOver() {
+        return remainingAttempts <= 0 || isWordGuessed();
+    }
+
+    private boolean isWordGuessed() {
+        for (char letter : currentWord.getWord().toCharArray()) {
             if (!guessedLetters.contains(letter)) {
                 return false;
             }
@@ -112,30 +76,11 @@ public class Game {
         return true;
     }
 
-
-    private static void difficultyLevelRequest() throws IOException {
-        InputHandler ih = new InputHandler();
-        Game.difficultyLevel = ih.selectDifficulty();
+    public String getHint() {
+        return currentWord.getHint();
     }
 
-
-    private static void categoryRequest() throws IOException {
-        InputHandler ih = new InputHandler();
-        Game.category = ih.selectCategory();
-    }
-
-
-    private static void setRandomWord(WordCategory category, WordDifficultyLevel difficultyLevel) {
-        Game.randomWord = WordsStorage.getRandomWordWithChosenCategoryAndDifficultLevel(category, difficultyLevel);
-    }
-
-
-    private static void setAcceptableMissNumber(WordDifficultyLevel difficultyLevel) {
-        switch (difficultyLevel) {
-            case EASY -> Game.acceptableMissNumber = 13;
-            case MEDIUM -> Game.acceptableMissNumber = 10;
-            case HARD -> Game.acceptableMissNumber = 7;
-        }
+    public String getWord() {
+        return currentWord.getWord();
     }
 }
-

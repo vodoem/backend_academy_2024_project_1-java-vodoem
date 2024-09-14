@@ -11,6 +11,7 @@ public enum WordCategory {
         this.title = title;
     }
 
+    //не используется, но может использоваться в InputHandler (на мой взгляд только усложнит читабильность)
     @Override public String toString() {
         return title;
     }

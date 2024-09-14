@@ -1,35 +1,44 @@
 package backend.academy.hangman_game;
 
-import lombok.experimental.UtilityClass;
-import java.io.IOException;
 import java.util.List;
 
-@UtilityClass
 public class Main {
-    public static void main(String[] args) throws IOException {
-        // Список слов
-        List<String> words = List.of(
-            "лев", "тигр", "слон", "кошка", "собака", "гетеродонтозавр",           // ANIMALS
-            "футбол", "баскетбол", "теннис", "волейбол", "гольф", // SPORT_TYPES
-            "бмв", "мерседес", "тойота", "ауди", "хонда"        // CAR_BRANDS
+    public static void main(String[] args) {
+        // Список слов и подсказок
+        List<GameWordDTO> words = List.of(
+            new GameWordDTO("слон", "Большое млекопитающее", WordCategory.ANIMALS, WordDifficultyLevel.MEDIUM),
+            new GameWordDTO("кот", "Домашнее животное", WordCategory.ANIMALS, WordDifficultyLevel.EASY),
+            new GameWordDTO("дельфин", "Умное морское млекопитающее", WordCategory.ANIMALS, WordDifficultyLevel.HARD),
+
+            new GameWordDTO("футбол", "Спорт с мячом", WordCategory.SPORT_TYPES, WordDifficultyLevel.EASY),
+            new GameWordDTO("баскетбол", "Спорт с кольцом", WordCategory.SPORT_TYPES, WordDifficultyLevel.MEDIUM),
+            new GameWordDTO("триатлон", "Соревнование на выносливость", WordCategory.SPORT_TYPES,
+                WordDifficultyLevel.HARD),
+
+            new GameWordDTO("форд", "Американская марка автомобилей", WordCategory.CAR_BRANDS,
+                WordDifficultyLevel.EASY),
+            new GameWordDTO("мерседес", "Немецкий люкс-бренд", WordCategory.CAR_BRANDS, WordDifficultyLevel.MEDIUM),
+            new GameWordDTO("ламборгини", "Итальянский спортивный автомобиль", WordCategory.CAR_BRANDS,
+                WordDifficultyLevel.HARD)
         );
 
-        // Список подсказок
-        List<String> hints = List.of(
-            "Царь зверей", "Полосатый хищник", "Большое млекопитающее", "Домашнее животное", "Друг человека", "Динозавр, живший в ранней юре, 200–190 миллионов лет назад",   // ANIMALS
-            "Игра ногами", "Игра с мячом и кольцом", "Ракетки и мяч", "Игра у сетки", "Игра с клюшкой",        // SPORT_TYPES
-            "Немецкая марка", "Люкс немецкого автопрома", "Японский автогигант", "Четыре кольца", "Японская марка"  // CAR_BRANDS
-        );
+        InputHandler inputHandler = new InputHandler();
+        WordsStorage wordsStorage = new WordsStorage(words);
+        GameManager gameManager = new GameManager(wordsStorage);
 
-        // Список категорий
-        List<WordCategory> wordCategories = List.of(
-            WordCategory.ANIMALS, WordCategory.ANIMALS, WordCategory.ANIMALS, WordCategory.ANIMALS, WordCategory.ANIMALS, WordCategory.ANIMALS, // ANIMALS
-            WordCategory.SPORT_TYPES, WordCategory.SPORT_TYPES, WordCategory.SPORT_TYPES, WordCategory.SPORT_TYPES, WordCategory.SPORT_TYPES, // SPORT_TYPES
-            WordCategory.CAR_BRANDS, WordCategory.CAR_BRANDS, WordCategory.CAR_BRANDS, WordCategory.CAR_BRANDS, WordCategory.CAR_BRANDS  // CAR_BRANDS
-        );
+        do {
+            WordCategory category = inputHandler.chooseCategory();
+            WordDifficultyLevel difficultyLevel = inputHandler.chooseDifficultyLevel();
 
-        Game.initializeGameWords(words, hints, wordCategories);
+            gameManager.startNewGame(category, difficultyLevel);
 
-        Game.start();
+            while (!gameManager.isGameOver()) {
+                char guess = inputHandler.getGuess();
+                gameManager.guess(guess);
+                System.out.println("Текущее состояние слова: " + gameManager.getGameState());
+            }
+
+            System.out.println("Игра окончена! Загаданное слово было: " + gameManager.getCurrentWord());
+        } while (inputHandler.getYesNoAnswer());
     }
 }

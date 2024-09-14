@@ -1,75 +1,77 @@
 package backend.academy.hangman_game;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class InputHandler {
     private final Scanner scanner;
-    private final WordDifficultyLevel[] difficultyLevels = WordDifficultyLevel.values();
-    private final WordCategory[] categories = WordCategory.values();
 
     public InputHandler() {
-        this.scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
     }
 
-    // Метод для выбора уровня сложности
-    public WordDifficultyLevel selectDifficulty() {
+    public WordCategory chooseCategory() {
+        System.out.println("Выберите категорию:");
+        System.out.println("1. Животные");
+        System.out.println("2. Виды спорта");
+        System.out.println("3. Автомобильные марки");
+
+        int choice = getValidIntegerInput();
+        return switch (choice) {
+            case 1 -> WordCategory.ANIMALS;
+            case 2 -> WordCategory.SPORT_TYPES;
+            case 3 -> WordCategory.CAR_BRANDS;
+            default -> {
+                System.out.println("Некорректный выбор, выбрана категория по умолчанию.");
+                yield WordCategory.ANIMALS;
+            }
+        };
+    }
+
+    public WordDifficultyLevel chooseDifficultyLevel() {
         System.out.println("Выберите уровень сложности:");
-        displayOptions(difficultyLevels);
-        int selectedOption = getUserSelection(difficultyLevels.length);
-        System.out.println("Вы выбрали: " + difficultyLevels[selectedOption - 1]);
-        return difficultyLevels[selectedOption - 1];
+        System.out.println("1. Легкий");
+        System.out.println("2. Средний");
+        System.out.println("3. Сложный");
+
+        int choice = getValidIntegerInput();
+        return switch (choice) {
+            case 1 -> WordDifficultyLevel.EASY;
+            case 2 -> WordDifficultyLevel.MEDIUM;
+            case 3 -> WordDifficultyLevel.HARD;
+            default -> {
+                System.out.println("Некорректный выбор, выбран уровень сложности по умолчанию.");
+                yield WordDifficultyLevel.EASY;
+            }
+        };
     }
 
-    // Метод для выбора категории слов
-    public WordCategory selectCategory() {
-        System.out.println("Выберите категорию слов:");
-        displayOptions(categories);
-        int selectedOption = getUserSelection(categories.length);
-        System.out.println("Вы выбрали: " + categories[selectedOption - 1]);
-        return categories[selectedOption - 1];
-    }
-
-    // Метод для отображения вариантов
-    private <T extends Enum<T>> void displayOptions(T[] options) {
-        for (int i = 0; i < options.length; i++) {
-            System.out.println((i + 1) + ". " + options[i].toString());
-        }
-    }
-
-    // Метод для получения корректного выбора пользователя
-    private int getUserSelection(int maxOption) {
-        int selection = promptForNumber();
-        while (!isValidSelection(selection, maxOption)) {
-            System.out.println("Некорректный ввод. Попробуйте снова.");
-            selection = promptForNumber();
-        }
-        return selection;
-    }
-
-    private int promptForNumber() {
-        while (!scanner.hasNextInt()) {
-            System.out.print("Введите число: ");
-            scanner.next(); // Пропустить нечисловой ввод
-        }
-        return scanner.nextInt();
-    }
-
-    private boolean isValidSelection(int selection, int maxOption) {
-        return selection >= 1 && selection <= maxOption;
-    }
-
-    // Метод для ввода буквы
     public char getGuess() {
-        System.out.println("Введите букву для угадывания: ");
-        String input = scanner.next();
-        while (input.length() != 1 || !Character.isLetter(input.charAt(0))) {
-            System.out.println("Введите одну букву: ");
-            input = scanner.next();
+        System.out.println("Введите букву:");
+        String input = scanner.nextLine().trim();
+        if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {
+            System.out.println("Некорректный ввод. Пожалуйста, введите одну букву.");
+            return getGuess();
         }
         return Character.toLowerCase(input.charAt(0));
     }
 
-    public void close() {
-        scanner.close();
+    public boolean getYesNoAnswer() {
+        System.out.println("Хотите сыграть еще раз? (да/нет)");
+        String input = scanner.nextLine().trim().toLowerCase();
+        return input.equals("да") || input.equals("д");
+    }
+
+    private int getValidIntegerInput() {
+        while (true) {
+            try {
+                int input = scanner.nextInt();
+                scanner.nextLine(); // Clear the newline character
+                return input;
+            } catch (InputMismatchException e) {
+                System.out.println("Некорректный ввод. Пожалуйста, введите число.");
+                scanner.next(); // Clear the invalid input
+            }
+        }
     }
 }

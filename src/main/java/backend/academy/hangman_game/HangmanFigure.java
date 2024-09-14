@@ -358,11 +358,10 @@ public class HangmanFigure {
 
     public String getFigure(int remainingAttempts) {
         int totalStages = stages.length;
-        int stageIndex = (totalStages - remainingAttempts * totalStages / maxAttempts);
+        int stageIndex =
+            (totalStages - 1) - (int) Math.floor(((double) remainingAttempts / maxAttempts) * (totalStages - 1));
 
-        stageIndex = limitStageIndex(stageIndex);
-
-        return stages[stageIndex];
+        return stages[limitStageIndex(stageIndex)];
     }
 
     private int limitStageIndex(int stageIndex) {
@@ -372,7 +371,9 @@ public class HangmanFigure {
         } else if (stageIndex < 0) {
             return 0;
         }
+        System.out.println(stageIndex);
         return stageIndex;
     }
+
 }
 

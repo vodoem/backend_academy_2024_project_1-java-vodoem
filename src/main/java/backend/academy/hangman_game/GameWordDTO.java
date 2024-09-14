@@ -3,35 +3,29 @@ package backend.academy.hangman_game;
 public class GameWordDTO {
     private final String word;
     private final String hint;
-    private final WordDifficultyLevel wordDifficultyLevel;
-    private final WordCategory wordCategory;
+    private final WordCategory category;
+    private final WordDifficultyLevel difficulty;
 
-    public GameWordDTO(String word, String hint, WordCategory wordCategory) {
+    public GameWordDTO(String word, String hint, WordCategory category, WordDifficultyLevel difficulty) {
         this.word = word;
         this.hint = hint;
-        this.wordCategory = wordCategory;
-        if (word.length() < 5) {
-            this.wordDifficultyLevel = WordDifficultyLevel.EASY;
-        } else if (word.length() < 7) {
-            this.wordDifficultyLevel = WordDifficultyLevel.MEDIUM;
-        } else {
-            this.wordDifficultyLevel = WordDifficultyLevel.HARD;
-        }
+        this.category = category;
+        this.difficulty = difficulty;
     }
 
-    public WordCategory getWordCategoty() {
-        return wordCategory;
-    }
-
-    public WordDifficultyLevel getWordDifficultyLevel() {
-        return wordDifficultyLevel;
+    public String getWord() {
+        return word;
     }
 
     public String getHint() {
         return hint;
     }
 
-    public String getWord() {
-        return word;
+    public WordCategory getCategory() {
+        return category;
+    }
+
+    public WordDifficultyLevel getDifficulty() {
+        return difficulty;
     }
 }

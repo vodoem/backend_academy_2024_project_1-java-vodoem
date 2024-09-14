@@ -1,41 +1,27 @@
 package backend.academy.hangman_game;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class WordsStorage {
-    private static List<GameWordDTO> gameWords;
+    private final List<GameWordDTO> words;
 
-    public static void initializeGameWords(List<GameWordDTO> gameWords) {
-        WordsStorage.gameWords = gameWords;
+    public WordsStorage(List<GameWordDTO> words) {
+        this.words = words;
     }
 
-    public static List<GameWordDTO> getGameWords() {
-        return gameWords;
-    }
-
-    public static GameWordDTO getRandomWordWithChosenCategoryAndDifficultLevel(
-        WordCategory wordCategory,
-        WordDifficultyLevel wordDifficultyLevel
+    public GameWordDTO getRandomWordWithChosenCategoryAndDifficultyLevel(
+        WordCategory category,
+        WordDifficultyLevel difficulty
     ) {
-        Random randomizer = new Random();
-        List<GameWordDTO> list =
-            WordsStorage.getGameWordsWithChosenCategoryAndDifficultLevel(wordCategory, wordDifficultyLevel);
-        return list.get(randomizer.nextInt(list.size()));
+        Random random = new Random();
+        return words.stream()
+            .filter(word -> word.getCategory() == category && word.getDifficulty() == difficulty)
+            .findAny()
+            .orElse(words.get(random.nextInt(words.size())));
     }
 
-    private static List<GameWordDTO> getGameWordsWithChosenCategoryAndDifficultLevel(
-        WordCategory wordCategory,
-        WordDifficultyLevel wordDifficultyLevel
-    ) {
-        List<GameWordDTO> resultList = new ArrayList<>();
-        for (GameWordDTO word : WordsStorage.gameWords) {
-            if (word.getWordCategoty() == wordCategory && word.getWordDifficultyLevel() == wordDifficultyLevel) {
-                resultList.add(word);
-            }
-        }
-        return resultList;
+    public List<GameWordDTO> getWords() {
+        return words;
     }
-
 }
