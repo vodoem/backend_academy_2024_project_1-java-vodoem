@@ -371,7 +371,6 @@ public class HangmanFigure {
         } else if (stageIndex < 0) {
             return 0;
         }
-        System.out.println(stageIndex);
         return stageIndex;
     }
 

@@ -19,7 +19,7 @@ public class GameManager {
     }
 
     public void guess(char letter) {
-        game.handleGuess(letter);
+        game.handleGuess(Character.toLowerCase(letter));
     }
 
     public String getGameState() {

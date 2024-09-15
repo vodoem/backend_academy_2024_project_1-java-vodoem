@@ -7,7 +7,8 @@ public class Game {
     private final WordsStorage wordsStorage;
     private GameWordDTO currentWord;
     private final Set<Character> guessedLetters;
-    private final Set<Character> incorrectGuesses; //не использую в логике, но возможно будет полезна при расширении функционала
+    private final Set<Character> incorrectGuesses;
+        //не использую в логике, но возможно будет полезна при расширении функционала
     private int remainingAttempts;
 
     public Game(WordsStorage wordsStorage) {
@@ -35,7 +36,6 @@ public class Game {
             default -> 0;
         };
     }
-
 
     public void handleGuess(char letter) {
         if (currentWord.getWord().indexOf(letter) >= 0) {
