@@ -17,9 +17,9 @@ public class WordsStorage {
         Random random = new Random();
 
         List<GameWordDTO> filteredWords = words.stream()
-            .filter(word -> word.getCategory() == category &&
-                word.getDifficulty() == difficulty &&
-                word.getWord().length() > 2)
+            .filter(word -> word.getCategory() == category)
+            .filter(word -> word.getDifficulty() == difficulty)
+            .filter(word -> word.getWord().length() > 2)
             .toList();
 
         if (filteredWords.isEmpty()) {
