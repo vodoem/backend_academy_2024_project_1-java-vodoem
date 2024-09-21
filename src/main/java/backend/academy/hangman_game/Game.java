@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Game {
+    private static final int MAX_ATTEMPTS_FOR_EASY_LEVEL = 13;
+    private static final int MAX_ATTEMPTS_FOR_MEDIUM_LEVEL = 10;
+    private static final int MAX_ATTEMPTS_FOR_HARD_LEVEL = 7;
     private final WordsStorage wordsStorage;
     private GameWordDTO currentWord;
     private final Set<Character> guessedLetters;
@@ -30,10 +33,9 @@ public class Game {
 
     private int getMaxAttempts(WordDifficultyLevel difficultyLevel) {
         return switch (difficultyLevel) {
-            case EASY -> 13;
-            case MEDIUM -> 10;
-            case HARD -> 7;
-            default -> 0;
+            case EASY -> MAX_ATTEMPTS_FOR_EASY_LEVEL;
+            case MEDIUM -> MAX_ATTEMPTS_FOR_MEDIUM_LEVEL;
+            case HARD -> MAX_ATTEMPTS_FOR_HARD_LEVEL;
         };
     }
 

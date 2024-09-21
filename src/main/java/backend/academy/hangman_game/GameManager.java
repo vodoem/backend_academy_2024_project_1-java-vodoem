@@ -22,9 +22,9 @@ public class GameManager {
         game.handleGuess(Character.toLowerCase(letter));
     }
 
-    public String getGameState() {
-        return game.getWordProgress() + " | Осталось попыток: " + game.getRemainingAttempts() + "\n" +
-            hangmanFigure.getFigure(game.getRemainingAttempts());
+    public String getCurrentGameProgress() {
+        return game.getWordProgress() + " | Осталось попыток: " + game.getRemainingAttempts() + "\n"
+            + hangmanFigure.getFigure(game.getRemainingAttempts());
     }
 
     public boolean isGameOver() {

@@ -22,9 +22,9 @@ public class GameStateChangeTest {
 
         // Act
         gameManager.guess('к');
-        assertThat(gameManager.getGameState()).contains("к _ _");
+        assertThat(gameManager.getCurrentGameProgress()).contains("к _ _");
 
         gameManager.guess('п');  // Неправильная буква
-        assertThat(gameManager.getGameState()).contains("к _ _");
+        assertThat(gameManager.getCurrentGameProgress()).contains("к _ _");
     }
 }

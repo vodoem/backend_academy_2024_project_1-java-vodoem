@@ -35,7 +35,7 @@ public class Main {
             while (!gameManager.isGameOver()) {
                 char guess = inputHandler.getGuess();
                 gameManager.guess(guess);
-                System.out.println("Текущее состояние слова: " + gameManager.getGameState());
+                System.out.println("Текущее состояние слова: " + gameManager.getCurrentGameProgress());
             }
 
             System.out.println("Игра окончена! Загаданное слово было: " + gameManager.getCurrentWord());

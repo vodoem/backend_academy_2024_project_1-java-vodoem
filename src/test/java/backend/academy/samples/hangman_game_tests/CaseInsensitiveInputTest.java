@@ -26,6 +26,6 @@ public class CaseInsensitiveInputTest {
         gameManager.guess('Т');  // Ввод заглавной буквы
 
         // Assert
-        assertThat(gameManager.getGameState()).contains("к о т");
+        assertThat(gameManager.getCurrentGameProgress()).contains("к о т");
     }
 }
