@@ -7,7 +7,7 @@ public enum WordCategory {
 
     private final String title;
 
-    private WordCategory(String title) {
+    WordCategory(String title) {
         this.title = title;
     }
 

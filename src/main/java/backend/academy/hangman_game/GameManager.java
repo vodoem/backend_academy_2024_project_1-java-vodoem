@@ -1,5 +1,7 @@
 package backend.academy.hangman_game;
 
+import java.io.PrintStream;
+
 public class GameManager {
     private final Game game;
     private HangmanFigure hangmanFigure;
@@ -14,7 +16,8 @@ public class GameManager {
 
     public void startNewGame(WordCategory category, WordDifficultyLevel difficultyLevel) {
         game.initializeGame(category, difficultyLevel);
-        System.out.println("Подсказка: " + game.getHint());
+        PrintStream printStream = System.out;
+        printStream.println("Подсказка: " + game.getHint());
         setHangmanFigure(game.getMaxAttempts());
     }
 

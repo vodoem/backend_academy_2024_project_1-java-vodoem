@@ -1,5 +1,6 @@
 package backend.academy.hangman_game;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
@@ -14,7 +15,7 @@ public class WordsStorage {
         WordCategory category,
         WordDifficultyLevel difficulty
     ) {
-        Random random = new Random();
+        Random random = new SecureRandom();
 
         List<GameWordDTO> filteredWords = words.stream()
             .filter(word -> word.getCategory() == category)
@@ -29,7 +30,4 @@ public class WordsStorage {
         return filteredWords.get(random.nextInt(filteredWords.size()));
     }
 
-    public List<GameWordDTO> getWords() {
-        return words;
-    }
 }

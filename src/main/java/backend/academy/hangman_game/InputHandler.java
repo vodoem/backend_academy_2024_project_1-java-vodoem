@@ -1,5 +1,8 @@
 package backend.academy.hangman_game;
 
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
@@ -9,18 +12,19 @@ public class InputHandler {
     private static final int FIRST_CHOICE = 1;
     private static final int SECOND_CHOICE = 2;
     private static final int THIRD_CHOICE = 3;
-
+    private final Random random = new SecureRandom();
+    private final PrintStream printStream = System.out;
     private final Scanner scanner;
 
     public InputHandler() {
-        scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in, StandardCharsets.UTF_8);
     }
 
     public WordCategory chooseCategory() {
-        System.out.println("Выберите категорию:");
-        System.out.println("1. Животные");
-        System.out.println("2. Виды спорта");
-        System.out.println("3. Автомобильные марки");
+        printStream.println("Выберите категорию:");
+        printStream.println("1. Животные");
+        printStream.println("2. Виды спорта");
+        printStream.println("3. Автомобильные марки");
 
         int choice = getValidIntegerInput();
         return switch (choice) {
@@ -28,8 +32,7 @@ public class InputHandler {
             case SECOND_CHOICE -> WordCategory.SPORT_TYPES;
             case THIRD_CHOICE -> WordCategory.CAR_BRANDS;
             default -> {
-                System.out.println("Некорректный выбор, выбрана категория по умолчанию.");
-                Random random = new Random();
+                printStream.println("Некорректный выбор, выбрана категория по умолчанию.");
                 List<WordCategory> categories = List.of(WordCategory.values());
                 yield categories.get(random.nextInt(categories.size()));
             }
@@ -37,10 +40,10 @@ public class InputHandler {
     }
 
     public WordDifficultyLevel chooseDifficultyLevel() {
-        System.out.println("Выберите уровень сложности:");
-        System.out.println("1. Легкий");
-        System.out.println("2. Средний");
-        System.out.println("3. Сложный");
+        printStream.println("Выберите уровень сложности:");
+        printStream.println("1. Легкий");
+        printStream.println("2. Средний");
+        printStream.println("3. Сложный");
 
         int choice = getValidIntegerInput();
         return switch (choice) {
@@ -48,8 +51,7 @@ public class InputHandler {
             case SECOND_CHOICE -> WordDifficultyLevel.MEDIUM;
             case THIRD_CHOICE -> WordDifficultyLevel.HARD;
             default -> {
-                System.out.println("Некорректный выбор, выбран уровень сложности по умолчанию.");
-                Random random = new Random();
+                printStream.println("Некорректный выбор, выбран уровень сложности по умолчанию.");
                 List<WordDifficultyLevel> levels = List.of(WordDifficultyLevel.values());
                 yield levels.get(random.nextInt(levels.size()));
             }
@@ -57,19 +59,19 @@ public class InputHandler {
     }
 
     public char getGuess() {
-        System.out.println("Введите букву:");
+        printStream.println("Введите букву:");
         String input = scanner.nextLine().trim();
         if (input.length() != 1 || !Character.isLetter(input.charAt(0))) {
-            System.out.println("Некорректный ввод. Пожалуйста, введите одну букву.");
+            printStream.println("Некорректный ввод. Пожалуйста, введите одну букву.");
             return getGuess();
         }
         return Character.toLowerCase(input.charAt(0));
     }
 
-    public boolean getYesNoAnswer() {
-        System.out.println("Хотите сыграть еще раз? (да/нет)");
+    public boolean isContinueGameRequested() {
+        printStream.println("Хотите сыграть еще раз? (да/нет)");
         String input = scanner.nextLine().trim().toLowerCase();
-        return input.equals("да") || input.equals("д");
+        return "да".equalsIgnoreCase(input) || "д".equalsIgnoreCase(input);
     }
 
     private int getValidIntegerInput() {
@@ -79,7 +81,7 @@ public class InputHandler {
                 scanner.nextLine();
                 return input;
             } catch (InputMismatchException e) {
-                System.out.println("Некорректный ввод. Пожалуйста, введите число.");
+                printStream.println("Некорректный ввод. Пожалуйста, введите число.");
                 scanner.next();
             }
         }

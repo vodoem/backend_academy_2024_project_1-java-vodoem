@@ -1,9 +1,15 @@
 package backend.academy.hangman_game;
 
+import java.io.PrintStream;
 import java.util.List;
 
 public class Main {
+
+    private Main() {
+    }
+
     public static void main(String[] args) {
+        PrintStream printStream = System.out;
         // Список слов и подсказок
         List<GameWordDTO> words = List.of(
             new GameWordDTO("слон", "Большое млекопитающее", WordCategory.ANIMALS, WordDifficultyLevel.MEDIUM),
@@ -35,10 +41,10 @@ public class Main {
             while (!gameManager.isGameOver()) {
                 char guess = inputHandler.getGuess();
                 gameManager.guess(guess);
-                System.out.println("Текущее состояние слова: " + gameManager.getCurrentGameProgress());
+                printStream.println("Текущее состояние слова: " + gameManager.getCurrentGameProgress());
             }
 
-            System.out.println("Игра окончена! Загаданное слово было: " + gameManager.getCurrentWord());
-        } while (inputHandler.getYesNoAnswer());
+            printStream.println("Игра окончена! Загаданное слово было: " + gameManager.getCurrentWord());
+        } while (inputHandler.isContinueGameRequested());
     }
 }

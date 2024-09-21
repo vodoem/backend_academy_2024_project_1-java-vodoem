@@ -10,21 +10,17 @@ public class Game {
     private final WordsStorage wordsStorage;
     private GameWordDTO currentWord;
     private final Set<Character> guessedLetters;
-    private final Set<Character> incorrectGuesses;
-        //не использую в логике, но возможно будет полезна при расширении функционала
     private int remainingAttempts;
 
     public Game(WordsStorage wordsStorage) {
         this.wordsStorage = wordsStorage;
         this.guessedLetters = new HashSet<>();
-        this.incorrectGuesses = new HashSet<>();
     }
 
     public void initializeGame(WordCategory category, WordDifficultyLevel difficultyLevel) {
         currentWord = wordsStorage.getRandomWordWithChosenCategoryAndDifficultyLevel(category, difficultyLevel);
         remainingAttempts = getMaxAttempts(difficultyLevel);
         guessedLetters.clear();
-        incorrectGuesses.clear();
     }
 
     public int getMaxAttempts() {
@@ -43,7 +39,6 @@ public class Game {
         if (currentWord.getWord().indexOf(letter) >= 0) {
             guessedLetters.add(letter);
         } else {
-            incorrectGuesses.add(letter);
             remainingAttempts--;
         }
     }

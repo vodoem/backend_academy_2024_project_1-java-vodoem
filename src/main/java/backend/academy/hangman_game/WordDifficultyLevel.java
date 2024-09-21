@@ -6,7 +6,7 @@ public enum WordDifficultyLevel {
     EASY("Легко");
     private final String title;
 
-    private WordDifficultyLevel(String title) {
+    WordDifficultyLevel(String title) {
         this.title = title;
     }
 
