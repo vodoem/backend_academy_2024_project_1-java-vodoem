@@ -1,9 +1,15 @@
 package backend.academy.hangman_game;
 
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class InputHandler {
+    private static final int FIRST_CHOICE = 1;
+    private static final int SECOND_CHOICE = 2;
+    private static final int THIRD_CHOICE = 3;
+
     private final Scanner scanner;
 
     public InputHandler() {
@@ -18,12 +24,14 @@ public class InputHandler {
 
         int choice = getValidIntegerInput();
         return switch (choice) {
-            case 1 -> WordCategory.ANIMALS;
-            case 2 -> WordCategory.SPORT_TYPES;
-            case 3 -> WordCategory.CAR_BRANDS;
+            case FIRST_CHOICE -> WordCategory.ANIMALS;
+            case SECOND_CHOICE -> WordCategory.SPORT_TYPES;
+            case THIRD_CHOICE -> WordCategory.CAR_BRANDS;
             default -> {
                 System.out.println("Некорректный выбор, выбрана категория по умолчанию.");
-                yield WordCategory.ANIMALS;
+                Random random = new Random();
+                List<WordCategory> categories = List.of(WordCategory.values());
+                yield categories.get(random.nextInt(categories.size()));
             }
         };
     }
@@ -36,12 +44,14 @@ public class InputHandler {
 
         int choice = getValidIntegerInput();
         return switch (choice) {
-            case 1 -> WordDifficultyLevel.EASY;
-            case 2 -> WordDifficultyLevel.MEDIUM;
-            case 3 -> WordDifficultyLevel.HARD;
+            case FIRST_CHOICE -> WordDifficultyLevel.EASY;
+            case SECOND_CHOICE -> WordDifficultyLevel.MEDIUM;
+            case THIRD_CHOICE -> WordDifficultyLevel.HARD;
             default -> {
                 System.out.println("Некорректный выбор, выбран уровень сложности по умолчанию.");
-                yield WordDifficultyLevel.EASY;
+                Random random = new Random();
+                List<WordDifficultyLevel> levels = List.of(WordDifficultyLevel.values());
+                yield levels.get(random.nextInt(levels.size()));
             }
         };
     }
@@ -66,11 +76,11 @@ public class InputHandler {
         while (true) {
             try {
                 int input = scanner.nextInt();
-                scanner.nextLine(); // Clear the newline character
+                scanner.nextLine();
                 return input;
             } catch (InputMismatchException e) {
                 System.out.println("Некорректный ввод. Пожалуйста, введите число.");
-                scanner.next(); // Clear the invalid input
+                scanner.next();
             }
         }
     }
